@@ -1,6 +1,8 @@
 ﻿using LanguageFeatures.Models;
 using System;
+using System.Collections.Generic;
 using System.Web.Mvc;
+using System.Linq;
 
 namespace LanguageFeatures.Controllers
 {
@@ -36,6 +38,21 @@ namespace LanguageFeatures.Controllers
                 Category="Infalatable"
             };
             return View("Result", (object)String.Format("The category of  {0} is {1}", myProduct.Name, myProduct.Category));
+        }
+
+        public ViewResult CreateCollection()
+        {
+            string[] stringArray = { "Greece", "Iceland", "Egypt" };
+            List<int> intList = new List<int> { 32, 11, 38 };
+            var result = string.Join(",", intList.Select(x => x.ToString()).ToArray());
+            int myNumber = 7;
+            Dictionary<string, int> myDict = new Dictionary<string, int> { { "Greece", 32 }, { "Iceland", 11 }, { "Egypt", 38 } };
+            string s = string.Join(",", myDict.Select(x => x.Key + "=" + x.Value).ToArray());
+            
+            //return View("Result", (object)stringArray[0]);
+            //return View("Result", (object)myNumber.ToString());
+            //return View("Result", (object)s);
+            return View("Result", (object)result);
         }
     }
 }
