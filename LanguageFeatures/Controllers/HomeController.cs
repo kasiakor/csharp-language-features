@@ -68,7 +68,31 @@ namespace LanguageFeatures.Controllers
             };
             decimal cartTotal = myCart.TotalPrices();
             //return View("Result", (object)System.Convert.ToString(cartTotal));
-            return View("Result", (object)String.Format("My shopping cart total is {0}", cartTotal)); 
+            return View("Result", (object)String.Format("My shopping cart total is {0}", cartTotal));
+        }
+
+        public ViewResult UseExtensionEnumerable()
+        {
+            IEnumerable<Product> products = new ShoppingCartInterface()
+            {
+                Products = new List<Product>
+                {
+                    new Product { Name = "K1", Price = 23.00M },
+                    new Product { Name = "K2", Price = 26.00M },
+                    new Product { Name = "K3", Price = 29.00M }
+                }
+            };
+
+            //create and populate an array of Product objects
+            Product[] productArray = {
+                new Product { Name = "K1", Price = 23.00M },
+                    new Product { Name = "K2", Price = 26.00M },
+                    new Product { Name = "K3", Price = 29.00M }
+            };
+            decimal cartTotal = products.TotalPrices();
+            decimal arrayTotal = productArray.TotalPrices();
+
+            return View("Result", (object)String.Format("My shopping cart total is {0} that should equal to total from the array of products {1}", cartTotal, arrayTotal));
         }
     }
 }
