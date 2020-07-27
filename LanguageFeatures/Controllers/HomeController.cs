@@ -89,10 +89,36 @@ namespace LanguageFeatures.Controllers
                     new Product { Name = "K2", Price = 26.00M },
                     new Product { Name = "K3", Price = 29.00M }
             };
+
+            //extension method in use - TotalPrice()
+            //due to switch to interface we can use it:
+            //1. for objects enumerated by IEnumerable<Product>, incl instances of ShoppingCart
+            //2. for array of Products
             decimal cartTotal = products.TotalPrices();
             decimal arrayTotal = productArray.TotalPrices();
 
             return View("Result", (object)String.Format("My shopping cart total is {0} that should equal to total from the array of products {1}", cartTotal, arrayTotal));
         }
+        public ViewResult UseFilterExtension()
+        {
+            IEnumerable<Product> products = new ShoppingCartInterface()
+            {
+                Products = new List<Product>
+                {
+                    new Product { Name = "K1", Price = 23.00M, Category = "River" },
+                    new Product { Name = "K2", Price = 26.00M, Category = "River" },
+                    new Product { Name = "K3", Price = 29.00M, Category = "Lake" }
+                }
+            };
+            decimal totalFilter = 0;
+            //extension method that filteres the collection, FilterByCategory
+            foreach (Product product in products.FilterByCategory("Lake"))
+            {
+                totalFilter += product.Price;
+            }
+
+            return View("Result", (object)String.Format("My shopping cart total with filter is {0}", totalFilter));
+        }
+
     }
 }

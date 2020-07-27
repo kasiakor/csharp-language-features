@@ -14,6 +14,7 @@ namespace LanguageFeatures.Models
 
         IEnumerator IEnumerable.GetEnumerator()
         {
+            //returns IEnumerator object to iterate through a collection
             return GetEnumerator();
         }
     }

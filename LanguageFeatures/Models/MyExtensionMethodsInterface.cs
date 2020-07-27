@@ -18,5 +18,20 @@ namespace LanguageFeatures.Models
             }
             return total;
         }
+
+        //filtering method to filter collection of objects
+        //category parameter added to inject a filter condition
+        //yeld keyword to apply selection criteria to items in the source data
+        public static IEnumerable<Product> FilterByCategory(this IEnumerable<Product> productEnum, string categoryParam)
+        {
+            foreach (Product product in productEnum)
+            {
+               if(product.Category == categoryParam)
+                {
+                    //total is calculated in the controller with filtering applied to foreach loop on products
+                    yield return product;
+                }
+            }
+        }
     }
 }
