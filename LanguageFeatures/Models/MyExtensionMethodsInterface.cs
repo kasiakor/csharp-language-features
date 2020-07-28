@@ -33,5 +33,19 @@ namespace LanguageFeatures.Models
                 }
             }
         }
+        //delegate, reference type variable  holds reference to method sygnature and return type
+        //Func must return a value and will always require at least one argument, public static Func<Object, bool> delegateFunc { get; set; }
+        //takes Product param and the bool, if true the product will be included in the result
+        public static IEnumerable<Product> Filter(this IEnumerable<Product> productEnum, Func<Product, bool> selectorParam)
+        {
+            foreach (Product product in productEnum)
+            {
+                if (selectorParam(product))
+                {
+                    //total is calculated in the controller with filtering applied to foreach loop on products
+                    yield return product;
+                }
+            }
+        }
     }
 }

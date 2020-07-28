@@ -46,7 +46,7 @@ namespace LanguageFeatures.Controllers
             string[] stringArray = { "Greece", "Iceland", "Egypt" };
             List<int> intList = new List<int> { 32, 11, 38 };
             var result = string.Join(",", intList.Select(x => x.ToString()).ToArray());
-            int myNumber = 7;
+            //int myNumber = 7;
             Dictionary<string, int> myDict = new Dictionary<string, int> { { "Greece", 32 }, { "Iceland", 11 }, { "Egypt", 38 } };
             string s = string.Join(",", myDict.Select(x => x.Key + "=" + x.Value).ToArray());
 
@@ -120,5 +120,30 @@ namespace LanguageFeatures.Controllers
             return View("Result", (object)String.Format("My shopping cart total with filter is {0}", totalFilter));
         }
 
+        public ViewResult UseFilterExtensionFunc()
+        {
+            IEnumerable<Product> products = new ShoppingCartInterface()
+            {
+                Products = new List<Product>
+                {
+                    new Product { Name = "K1", Price = 23.00M, Category = "River" },
+                    new Product { Name = "K2", Price = 26.00M, Category = "River" },
+                    new Product { Name = "K3", Price = 29.00M, Category = "Lake" }
+                }
+            };
+
+            //delegate Func
+            // it can point to any method, as long as the values, a method accepts and returns, match the delegate signature
+            //using lambda expression
+            Func<Product, bool> categoryFilter = product => product.Category == "Lake";
+            decimal totalFilter = 0;
+            //extension method that filteres the collection
+            foreach (Product product in products.Filter(categoryFilter))
+            {
+                totalFilter += product.Price;
+            }
+
+            return View("Result", (object)String.Format("My shopping cart total with filter is {0}", totalFilter));
+        }
     }
 }
