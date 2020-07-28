@@ -126,7 +126,7 @@ namespace LanguageFeatures.Controllers
             {
                 Products = new List<Product>
                 {
-                    new Product { Name = "K1", Price = 23.00M, Category = "River" },
+                    new Product { Name = "K1", Price = 25.00M, Category = "River" },
                     new Product { Name = "K2", Price = 26.00M, Category = "River" },
                     new Product { Name = "K3", Price = 29.00M, Category = "Lake" }
                 }
@@ -135,7 +135,7 @@ namespace LanguageFeatures.Controllers
             //delegate Func
             // it can point to any method, as long as the values, a method accepts and returns, match the delegate signature
             //using lambda expression
-            Func<Product, bool> categoryFilter = product => product.Category == "Lake";
+            Func<Product, bool> categoryFilter = product => product.Category == "River";
             decimal totalFilter = 0;
             //extension method that filteres the collection
             foreach (Product product in products.Filter(categoryFilter))
@@ -143,7 +143,33 @@ namespace LanguageFeatures.Controllers
                 totalFilter += product.Price;
             }
 
-            return View("Result", (object)String.Format("My shopping cart total with filter is {0}", totalFilter));
+            return View("Result", (object)String.Format("My shopping cart total with filter and Func is {0}", totalFilter));
         }
+
+        public ViewResult UseFilterExtensionNoFunc()
+        {
+            IEnumerable<Product> products = new ShoppingCartInterface()
+            {
+                Products = new List<Product>
+                {
+                    new Product { Name = "K1", Price = 25.00M, Category = "River" },
+                    new Product { Name = "K2", Price = 11.00M, Category = "Estuary" },
+                    new Product { Name = "K3", Price = 29.00M, Category = "Lake" }
+                }
+            };
+
+            // it can point to any method, as long as the values, a method accepts and returns, match the delegate signature
+            //using lambda expression without Func
+            decimal totalFilter = 0;
+            //extension method that filteres the collection
+            foreach (Product product in products.Filter(product => product.Category == "Estuary"))
+            {
+                totalFilter += product.Price;
+            }
+
+            return View("Result", (object)String.Format("My shopping cart total with filter without Func is {0}", totalFilter));
+        }
+
+
     }
 }
