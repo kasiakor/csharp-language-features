@@ -170,6 +170,32 @@ namespace LanguageFeatures.Controllers
             return View("Result", (object)String.Format("My shopping cart total with filter without Func is {0}", totalFilter));
         }
 
+        public ViewResult UseFilterExtensionNoFuncExtended()
+        {
+            IEnumerable<Product> products = new ShoppingCartInterface()
+            {
+                Products = new List<Product>
+                {
+                    new Product { Name = "K1", Price = 25.00M, Category = "River" },
+                    new Product { Name = "K2", Price = 11.00M, Category = "Estuary" },
+                    new Product { Name = "K3", Price = 29.00M, Category = "Lake" },
+                    new Product { Name = "K4", Price = 31.00M, Category = "Lake" },
+                    new Product { Name = "K5", Price = 33.00M, Category = "Lake" }
+                }
+            };
+
+            // it can point to any method, as long as the values, a method accepts and returns, match the delegate signature
+            //using lambda expression without Func
+            decimal totalFilter = 0;
+            //extension method that filteres the collection
+            foreach (Product product in products.Filter(product => product.Category == "Estuary" || product.Price > 30.00M))
+            {
+                totalFilter += product.Price;
+            }
+
+            return View("Result", (object)String.Format("My shopping cart total with filter without Func, extended, is {0}", totalFilter));
+        }
+
 
     }
 }
