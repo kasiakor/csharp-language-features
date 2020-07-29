@@ -232,5 +232,37 @@ namespace LanguageFeatures.Controllers
 
             return View("Result", (object)result.ToString());
         }
+
+        public ViewResult FindProducts()
+        {
+
+            Product[] products =
+
+                     {
+                    new Product { Name = "K1", Price = 25.00M, Category = "River" },
+                    new Product { Name = "K2", Price = 11.00M, Category = "Estuary" },
+                    new Product { Name = "K3", Price = 29.00M, Category = "Lake" },
+                    new Product { Name = "K4", Price = 31.00M, Category = "Lake" },
+                    new Product { Name = "K5", Price = 33.00M, Category = "Lake" }
+                };
+
+            //find 3 most expensive products from the list
+            //OrderByDescending rearanges data in the data source, lambda expression will return value for the comparision
+            //var means we dont have a type to bind to
+            //Take returns number of items from the front of the results
+            //Select project the result
+            var foundProducts = products.OrderByDescending(p => p.Price).Take(3).Select(p => new { p.Name, p.Price});
+        
+
+            //Represents a mutable string of characters. This class cannot be inherited.
+            StringBuilder result = new StringBuilder();
+            foreach (var prod in foundProducts)
+            {
+                //result.Append("Name: " + item.Name).Append(", ").Append("Price: " + item.Price).Append("; ");
+                result.AppendFormat("Price : {0} ;", prod.Price);
+            }
+
+            return View("Result", (object)result.ToString());
+        }
     }
 }
