@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
 using System.Linq;
-
+using System.Text;
 
 namespace LanguageFeatures.Controllers
 {
@@ -196,6 +196,41 @@ namespace LanguageFeatures.Controllers
             return View("Result", (object)String.Format("My shopping cart total with filter without Func, extended, is {0}", totalFilter));
         }
 
+        public ViewResult CreateAnonArray()
+        {
 
+            ////type inference, local variable without explicitly specifying the type
+            //comipler allows only members of inferred class
+            //var myVariable = new Product { Name = "B1", Price = 25.00M, Category = "Road" };
+            //string name = myVariable.Name;
+            //decimal val = myVariable.Price;
+            //string category = myVariable.Category;
+            //int count = myVariable.Count //compiler error
+
+            //create simply object without defining the class using type inference
+            //anonymously typed object
+            //get set only properties defined in the initializer
+            //var myAnonType = new
+            //{
+            //    Name = "B2",
+            //    Category = "Mountain"
+            //};
+
+            var oddsAndEnds = new[]
+            {
+                new { Name = "Table", Category = "Furniture"},
+                new { Name = "Ball", Category = "Basketball"},
+                new { Name = "Dinghy", Category = "Sailing"}
+            };
+
+            //Represents a mutable string of characters. This class cannot be inherited.
+            StringBuilder result = new StringBuilder();
+            foreach(var item in oddsAndEnds)
+            {
+                result.Append("Name: " + item.Name).Append(", ").Append("Category: " + item.Category).Append("; ");
+            }
+
+            return View("Result", (object)result.ToString());
+        }
     }
 }
