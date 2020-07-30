@@ -264,5 +264,62 @@ namespace LanguageFeatures.Controllers
 
             return View("Result", (object)result.ToString());
         }
+
+        public ViewResult FindProductsDefferedLinq()
+        {
+
+            Product[] products =
+
+                     {
+                    new Product { Name = "K1", Price = 25.00M, Category = "River" },
+                    new Product { Name = "K2", Price = 11.00M, Category = "Estuary" },
+                    new Product { Name = "K3", Price = 29.00M, Category = "Lake" },
+                    new Product { Name = "K4", Price = 31.00M, Category = "Lake" },
+                    new Product { Name = "K5", Price = 33.00M, Category = "Lake" }
+                };
+
+            //find 3 most expensive products from the list
+            //OrderByDescending rearanges data in the data source, lambda expression will return value for the comparision
+            //var means we dont have a type to bind to
+            //Take returns number of items from the front of the results
+            //Select project the result
+            var foundProducts = products.OrderByDescending(p => p.Price).Take(1).Select(p => new { p.Name, p.Price });
+
+            //deffered Linq query - the query is not evaluated untill results are enumerated. 48.00 is the highest price
+            products[2] = new Product { Name = "K6", Price = 48.00M };
+
+
+            //Represents a mutable string of characters. This class cannot be inherited.
+            StringBuilder result = new StringBuilder();
+            foreach (var prod in foundProducts)
+            {
+                //result.Append("Name: " + item.Name).Append(", ").Append("Price: " + item.Price).Append("; ");
+                result.AppendFormat("Price : {0} ;", prod.Price);
+            }
+
+            return View("Result", (object)result.ToString());
+        }
+
+        public ViewResult SumProductsImmedExecLinq()
+        {
+
+            Product[] products =
+
+                     {
+                    new Product { Name = "K1", Price = 20.00M, Category = "River" },
+                    new Product { Name = "K2", Price = 10.00M, Category = "Estuary" },
+                    new Product { Name = "K3", Price = 25.00M, Category = "Lake" },
+                    new Product { Name = "K4", Price = 30.00M, Category = "Lake" },
+                    new Product { Name = "K5", Price = 35.00M, Category = "Lake" }
+                };
+
+           //Sum method is executed immediately, 
+            var sumProducts = products.Sum(p => p.Price);
+
+            //not added to sum of prices
+            products[2] = new Product { Name = "K6", Price = 5.00M };
+
+            return View("Result", (object)String.Format("The sum of prices is {0}", sumProducts));
+        }
     }
 }
